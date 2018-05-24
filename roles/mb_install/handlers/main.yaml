@@ -1,0 +1,3 @@
+---
+- name: metabase reload systemd
+  command: systemctl daemon-reload

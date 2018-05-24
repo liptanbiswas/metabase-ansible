@@ -1,0 +1,7 @@
+metabase_db_user: metabase
+metabase_db_name: metabase
+metabase_db_user_pass: asdksjdd5768698ghgGYHGYU356
+
+letsencrypt_generate: true
+letsencrypt_domain: meta.liptan.tk
+letsencrypt_email: liptanbis@gmail.com

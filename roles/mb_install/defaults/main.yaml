@@ -1,0 +1,5 @@
+---
+metabase_path: /var/metabase
+metabase_jar: http://downloads.metabase.com/v0.29.3/metabase.jar
+metabase_user: metabase
+metabase_group: metabase

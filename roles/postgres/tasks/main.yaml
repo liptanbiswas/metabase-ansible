@@ -1,0 +1,60 @@
+---
+- name: install repo
+  apt_repository: repo='deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main' state=present filename='postgres' update_cache='yes'
+
+- name: install key
+  apt_key: url=https://www.postgresql.org/media/keys/ACCC4CF8.asc state=present
+
+- name: install postgresql
+  package: name={{ item }} state=present
+  with_items:
+    - postgresql-10
+    - libpq-dev
+    - postgresql-contrib
+    - python3-pip
+
+- name: install psycopg2
+  pip:
+    name: psycopg2-binary
+
+- name: configure postgresql
+  copy:
+    src: postgresql.conf
+    dest: /etc/postgresql/10/main/postgresql.conf
+    owner: postgres
+    group: postgres
+    mode: 0644
+  notify:
+    - restart postgresql
+
+- name: authentication
+  template:
+    src: pg_hba.conf.j2
+    dest: /etc/postgresql/10/main/pg_hba.conf
+    owner: postgres
+    group: postgres
+    mode: 0640
+  notify:
+    - reload postgresql
+
+- name: service
+  service: name=postgresql state=started enabled=yes
+
+- meta: flush_handlers
+
+- name: users
+  become: true
+  become_user: postgres
+  postgresql_user:
+    name: "{{ metabase_db_user }}"
+    password: "{{ metabase_db_user_pass }}"
+    encrypted: yes
+
+- name: databases
+  become: true
+  become_user: postgres
+  postgresql_db:
+    name: "{{ metabase_db_name }}"
+    owner: "{{ metabase_db_user }}"
+    encoding: "UTF-8"
+    template: "template0"

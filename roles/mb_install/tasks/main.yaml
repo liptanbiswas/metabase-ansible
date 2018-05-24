@@ -1,0 +1,49 @@
+---
+- name: group
+  group: name={{ metabase_group }} state=present
+
+- name: user
+  user:
+    name: "{{ metabase_user }}"
+    group: "{{ metabase_group }}"
+    home: "{{ metabase_path }}"
+    state: present
+    system: yes
+
+- name: installation directory
+  file:
+    name: "{{ metabase_path }}"
+    state: directory
+    owner: "{{ metabase_user }}"
+    group: "{{ metabase_group }}"
+    mode: 0755
+
+- name: install metabase
+  get_url:
+    url: "{{ metabase_jar }}"
+    dest: "{{ metabase_path }}"
+    owner: "{{ metabase_user }}"
+    group: "{{ metabase_group }}"
+
+- name: enviroment file
+  template:
+    dest: "{{ metabase_path }}/metabase.env"
+    src: metabase.env
+    mode: 0644
+    owner: "{{ metabase_user }}"
+    group: "{{ metabase_group }}"
+
+- name: service file
+  template:
+    dest: /lib/systemd/system/metabase.service
+    src: metabase.service
+    mode: 0644
+    owner: root
+    group: root
+  notify:
+    - metabase reload systemd
+
+- meta: flush_handlers
+
+- name: service
+  service: name=metabase state=started enabled=yes

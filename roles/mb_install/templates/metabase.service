@@ -1,0 +1,18 @@
+[Unit]
+Description=Metabase server
+After=syslog.target
+After=network.target
+
+[Service]
+EnvironmentFile={{ metabase_path }}/metabase.env
+User={{ metabase_user }}
+Group={{ metabase_group }}
+Type=simple
+ExecStart=/usr/bin/java -jar {{ metabase_path }}/metabase.jar
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=metabase
+
+[Install]
+WantedBy=multi-user.target
