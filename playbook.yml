@@ -10,6 +10,18 @@
     apt:
       upgrade: yes
       update_cache: yes
+- name: get public IP
+  hosts: db1
+  tasks:
+    - name: get public IP
+      ipify_facts:
+      register: public_ip_db1
+- name: get public IP
+  hosts: mb1
+  tasks:
+    - name: get public IP
+      ipify_facts:
+      register: public_ip_mb1
 - hosts: database
   become: true
   roles:

@@ -1,3 +1,4 @@
----
 - name: metabase reload systemd
   command: systemctl daemon-reload
+- name: metabase restart
+  service: name=metabase state=restarted

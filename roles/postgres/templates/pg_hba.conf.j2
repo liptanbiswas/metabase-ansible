@@ -97,4 +97,4 @@ host    all             all             ::1/128                 md5
 #local   replication     postgres                                peer
 #host    replication     postgres        127.0.0.1/32            md5
 #host    replication     postgres        ::1/128                 md5
-host    {{ metabase_db_name }}          {{ metabase_db_user }}          {{ hostvars['mb1']['ansible_default_ipv4']['address'] }}    md5
+host    {{ metabase_db_name }}          {{ metabase_db_user }}          {{ hostvars['mb1']['public_ip_mb1']['ansible_facts']['ipify_public_ip'] }}/32    md5

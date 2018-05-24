@@ -43,6 +43,7 @@
     group: www-data
   notify:
     - restart nginx
+    - restart metabase
 
 - name: cronjob
   cron:
